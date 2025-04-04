@@ -1,12 +1,10 @@
-import pycom
+import machine
 import time
 
-pycom.heartbeat(False)
+led = machine.Pin(2, machine.Pin.OUT)  # GPIO2 ist oft mit der eingebauten LED verbunden
 
 while True:
-    pycom.rgbled(0xFF0000)  # Red
-    time.sleep(1)
-    pycom.rgbled(0x00FF00)  # Green
-    time.sleep(1)
-    pycom.rgbled(0x0000FF)  # Blue
-    time.sleep(1)
+    led.value(1)  # LED einschalten
+    time.sleep(1)  # 1 Sekunde warten
+    led.value(0)  # LED ausschalten
+    time.sleep(1)  # 1 Sekunde warten
