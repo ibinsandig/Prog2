@@ -1,5 +1,5 @@
-from machine import Pin
-
+import machine
+import time
 # Configure D1 (GPIO5) as an output pin
 transistor = Pin(5, Pin.OUT)
 
@@ -11,3 +11,12 @@ transistor.off()
 
 # Set the initial state of the LED (off)
 led.off()
+
+counter = -10
+
+while counter < 5:
+    led.on()  # Turn on the LED to indicate booting
+    time.sleep(0.5)  # Wait for a moment
+    led.off()  # Turn off the LED
+    time.sleep(0.5)  # Wait for a moment
+    counter += 1
