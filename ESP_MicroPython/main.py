@@ -1,8 +1,10 @@
+import config.py
+
 def led_blink():
     for _ in range(3):
-        bootled.on()    # type: ignore
+        led.on()    # type: ignore
         time.sleep(0.5) # type: ignore
-        bootled.off() # type: ignore
+        led.off() # type: ignore
         time.sleep(0.5) # type: ignore
         
 def transistor_test():
@@ -12,11 +14,11 @@ def transistor_test():
         transistor.off() # type: ignore
         time.sleep(3) # type: ignore
 
-def test_feuchtigkeit(anzahl):
-    while anzahl > 10:
-        Serial.print("Digital: ", digital_value) # type: ignore
-        Serial.print("Analog: ", analog_value) # type: ignore
-        time.sleep(1)  # type: ignore
-        anzahl += 1
+def test_feuchtigkeit():
+    while True:
+        if digital_value ==0
+            led.off() # type: ignore
+        else:
+            led.on()
 
-test_feuchtigkeit(10)
+test_feuchtigkeit()
