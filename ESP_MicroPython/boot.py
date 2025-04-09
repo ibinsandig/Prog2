@@ -1,4 +1,5 @@
 import machine
+from machine import Pin
 import time
 # Configure D1 (GPIO5) as an output pin
 transistor = Pin(5, Pin.OUT)
