@@ -1,4 +1,4 @@
-import machine as mech
+import machine as mech # type: ignore
 import time
 
 # Pin zur Aktivierung der Pumpe durch TRansistor
