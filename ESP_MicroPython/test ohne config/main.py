@@ -45,9 +45,6 @@ def test_feuchtigkeit():
         count += 1
         time.sleep(1)
 
-
-
-# main
 led_blink_green()
 
 transistor_test(3)

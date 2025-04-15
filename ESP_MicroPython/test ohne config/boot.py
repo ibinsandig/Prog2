@@ -1,13 +1,20 @@
 import machine # type: ignore
 import time
+import network
+import socket
 
-led_pin = machine.Pin(2, machine.Pin.OUT)
+# WLAN-Station-Modus aktivieren
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
 
-def blink_led():
-    for i in range(3):
-        led_pin.on()
-        time.sleep(0.5)
-        led_pin.off()
-        time.sleep(0.5)
-        
-blink_led()
+# Mit WLAN verbinden
+ssid = "Lochbox"
+password = "280874b61133"
+wlan.connect(ssid, password)
+
+# Warten, bis die Verbindung hergestellt ist
+while not wlan.isconnected():
+    pass
+    print(".")
+
+print("Verbunden! IP-Adresse:", wlan.ifconfig()[0])
