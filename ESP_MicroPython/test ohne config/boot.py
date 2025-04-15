@@ -8,8 +8,8 @@ wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
 
 # Mit WLAN verbinden
-ssid = "Lochbox"
-password = "280874b61133"
+ssid = "WLAN"
+password = "penispenis"
 wlan.connect(ssid, password)
 
 # Warten, bis die Verbindung hergestellt ist
