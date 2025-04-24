@@ -26,5 +26,4 @@ class feuchtigkeitsensor:
     def __init__(self, pin):
         self.sensor = machine.Pin(pin, machine.Pin.In)
     
-    def messung(self):
-        analogValue = machine.Pin(pin,) 
+ #   def messung(self):
