@@ -1,0 +1,44 @@
+Klar, hier ist eine kompakte, aktuelle Liste der benötigten Software für dein komplettes IoT-Watering-Projekt mit MQTT, MicroPython, Server, Datenbank, Webinterface und Domain/HTTPS-Zugriff:
+
+
+🧠 Raspberry Pi (Server-Seite)
+🧩 Basis-System
+
+Aufgabe	Software / Tool
+Betriebssystem	Raspberry Pi OS Lite (empfohlen, headless)
+Paketverwaltung & Python	apt, pip (Python 3 vorinstalliert)
+📡 MQTT-Kommunikation
+
+Aufgabe	Software
+MQTT-Broker	Mosquitto (sudo apt install mosquitto mosquitto-clients)
+MQTT-Client für Python	paho-mqtt (pip install paho-mqtt)
+🗄️ Datenbank
+
+Option	Software
+Einfach (lokal, leicht)	SQLite (Standard mit Python)
+Leistungsfähiger (Netzwerkfähig)	MariaDB oder PostgreSQL
+🧪 Backend (API & Datenverarbeitung)
+
+Option	Software
+Einfach & schnell	Flask (pip install flask)
+Modern & asynchron	FastAPI (pip install fastapi uvicorn)
+🌐 Webserver & Domain
+
+Aufgabe	Software / Dienst
+Reverse Proxy	Nginx (sudo apt install nginx)
+HTTPS-Zertifikat	Certbot + Let’s Encrypt (sudo apt install certbot python3-certbot-nginx)
+Domain-Handling (mit DynDNS)	DuckDNS, No-IP, Cloudflare DDNS-Skript
+🌍 Frontend (Anzeige & Steuerung)
+
+Aufgabe	Tool
+Webinterface	HTML, CSS, JavaScript
+Diagramm-Darstellung	Chart.js
+Flask/Jinja2 Templates	Optional, für dynamische Seiten
+🛠️ Optional & Nützlich
+
+Zweck	Tool
+MQTT-Tests & Debugging	MQTT Explorer (GUI), mosquitto_sub/pub
+Code-Versionierung	Git
+Systemüberwachung	htop, iotop, logrotate, fail2ban
+Autostart-Dienste	systemd für Backend-Skripte oder pm2 bei Node.js
+Wenn du möchtest, stelle ich dir ein Installations-Skript oder eine Checkliste als Markdown/PDF zusammen, damit du Punkt für Punkt abhaken kannst. Willst du das?

@@ -10,7 +10,7 @@ Durchführung in 2er-Teams (bei 43 Personen(?) 20 2er-Gruppen + 1 3er-Gruppe)
     ▪ zum Projekt gehört auch ein rudimentäres Projektmanagement (User Stories, Issues, Projektsteuerung, Stundenaufzeichnung, z.B. über Github)
     ▪ die Basis für das Projekt ist der Mikrocontroller ESP8266 (micropython-fähig)
 
-DieseThemen müssen im Miniprojekt abgedeckt werden:
+Diese Themen müssen im Miniprojekt abgedeckt werden:
     1. Mikrocontroller: Das Projekt muss mit einem Mikrocontroller, z.B. ESP8266, umgesetzt werden
     2. Simple Multitasking: Es muss dabei das Konzept der voneinander unabhängigen Aufgaben umgesetzt werden.
     3. Kommunikation: Es müssen Daten in beiden Richtungen zwischen dem Mikrocontroller und dem Server/Benutzer-Interface ausgetauscht werden.
