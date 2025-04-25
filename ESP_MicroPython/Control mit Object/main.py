@@ -19,6 +19,7 @@ class WaterPump:
 
 
 pump = WaterPump(5)
+#leck eieer
 
 pump.startstop(6)
 
