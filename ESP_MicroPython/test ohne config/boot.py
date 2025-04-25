@@ -1,6 +1,6 @@
 import machine # type: ignore
 import time
-import network
+import network # type: ignore
 import socket
 
 # WLAN-Station-Modus aktivieren
