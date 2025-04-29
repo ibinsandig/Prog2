@@ -1,0 +1,4 @@
+pm2 => auto start
+    pm2 start my_script.py --interpreter python3
+    pm2 startup # Einfügen der neuen Programme in Startup Skript
+    pm2 save # Speichern des Skripts
