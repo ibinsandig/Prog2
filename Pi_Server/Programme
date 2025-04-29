@@ -33,3 +33,21 @@ ufw => Firewall
 
     sudo ufw enable             # Firewall aktivieren
     sudo ufw status verbose    # Status der Firewall
+
+
+
+
+
+
+
+    C:\Users\lbrau>ping -6 lbraun.nl
+
+Ping wird ausgeführt für lbraun.nl [2a02:3102:6894:5200:3e04:6d1d:4553:25c8] mit 32 Bytes Daten:
+Zielhost nicht erreichbar.
+Zielhost nicht erreichbar.
+Zielhost nicht erreichbar.
+Zielhost nicht erreichbar.
+
+Ping-Statistik für 2a02:3102:6894:5200:3e04:6d1d:4553:25c8:
+    Pakete: Gesendet = 4, Empfangen = 0, Verloren = 4
+    (100% Verlust),
