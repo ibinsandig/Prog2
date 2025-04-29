@@ -1,4 +1,35 @@
+RPi4 global: 2a02:3102:6894:5200:3e04:6d1d:4553:25c8
+RPi4 Domain: lbraun.nl
+
 pm2 => auto start
+
     pm2 start my_script.py --interpreter python3
     pm2 startup # Einfügen der neuen Programme in Startup Skript
     pm2 save # Speichern des Skripts
+
+nginx 
+    sudo systemctl enable nginx
+    sudo systemctl start nginx
+
+    http://[2a02:3102:6894:5200:3e04:6d1d:4553:25c8]
+
+ufw => Firewall
+
+    - Fire wall ist automatisch aktiviert und bootet mit dem System
+
+    sudo apt install ufw -y
+    sudo ufw default deny incoming  # Alle eingehenden Verbindungen blockieren
+    sudo ufw default allow outgoing # Alle ausgehenden Verbindungen erlauben
+
+    sudo ufw allow 22/tcp   # SSH
+    sudo ufw allow 80/tcp   # HTTP
+    sudo ufw allow 443/tcp  # HTTPS
+
+    /etc/ufw/ufw.conf
+
+    in der Datei IPv6 aktivieren
+
+    IPV6=yes        # IPv6 aktivieren
+
+    sudo ufw enable             # Firewall aktivieren
+    sudo ufw status verbose    # Status der Firewall
