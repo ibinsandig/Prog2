@@ -24,7 +24,7 @@ ufw => Firewall
     sudo ufw allow 22/tcp   # SSH
     sudo ufw allow 80/tcp   # HTTP
     sudo ufw allow 443/tcp  # HTTPS
-
+    sudo ufw allow 5900     # VNC
     /etc/ufw/ufw.conf
 
     in der Datei IPv6 aktivieren
@@ -38,7 +38,30 @@ ufw => Firewall
 
 ![alt text](image.png)
 
+✅ Möglichkeit 2: IPv4-Zugang über Tunnel oder Drittanbieter
+Wenn du nur IPv6 hast, aber öffentlich über IPv4 erreichbar sein willst, gibt es Workarounds:
 
+🔁 Option A: Reverse Proxy mit Cloudflare (kostenlos)
+Cloudflare bietet dir A-Record über IPv4
+
+Du verbindest dich dort → Cloudflare leitet an deine IPv6 weiter
+
+Vorteil: kein eigener IPv4 nötig
+
+👉 Vorgehen:
+
+Erstelle einen kostenlosen Account bei cloudflare.com
+
+Verwalte deine Domain dort
+
+Setze einen A-Record mit beliebiger IPv4 (Cloudflare übernimmt das)
+
+Leite den Verkehr intern an deine IPv6-Adresse
+
+🔁 Option B: IPv4-Tunnel mit Dienste wie Tunnelbroker.net
+Du bekommst dort eine feste IPv6/IPv4-Adresse per Tunnel
+
+Funktioniert, aber ist komplexer und braucht IPv6-fähigen Router
 
     C:\Users\lbrau>ping -6 lbraun.nl
 
