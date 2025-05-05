@@ -19,7 +19,7 @@ nginx
     sudo systemctl restart nginx
 
 
-
+![alt text](image.png)
 
 ✅ Möglichkeit 2: IPv4-Zugang über Tunnel oder Drittanbieter
 Wenn du nur IPv6 hast, aber öffentlich über IPv4 erreichbar sein willst, gibt es Workarounds:
