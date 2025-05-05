@@ -11,29 +11,12 @@ nginx
     sudo systemctl enable nginx
     sudo systemctl start nginx
 
-    http://[2a02:3102:6894:5200:3e04:6d1d:4553:25c8]
+    
+    sudo chmod o+x /home/lbraun
+    sudo chmod o+x /home/lbraun/Watering
+    sudo chmod o+x /home/lbraun/Watering/html
 
-ufw => Firewall
-
-    - Fire wall ist automatisch aktiviert und bootet mit dem System
-
-    sudo apt install ufw -y
-    sudo ufw default deny incoming  # Alle eingehenden Verbindungen blockieren
-    sudo ufw default allow outgoing # Alle ausgehenden Verbindungen erlauben
-
-    sudo ufw allow 22/tcp   # SSH
-    sudo ufw allow 80/tcp   # HTTP
-    sudo ufw allow 443/tcp  # HTTPS
-    sudo ufw allow 5900     # VNC
-    /etc/ufw/ufw.conf
-
-    in der Datei IPv6 aktivieren
-
-    IPV6=yes        # IPv6 aktivieren
-
-    sudo ufw enable             # Firewall aktivieren
-    sudo ufw status verbose    # Status der Firewall
-
+    sudo systemctl restart nginx
 
 
 
