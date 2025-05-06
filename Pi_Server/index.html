@@ -2,222 +2,34 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Uhr & Taschenrechner</title>
+    <title>Trump Parade</title>
     <style>
         body {
             margin: 0;
-            font-family: sans-serif;
-            display: flex;
-            background-image: url('trump-pixel.png');
-            background-repeat: repeat;
-            background-size: 100px 100px;
+            overflow: hidden;
+            background: #222;
         }
 
-        .calculator {
-            width: 300px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-        }
-
-        .calculator input {
-            width: 100%;
-            height: 50px;
-            font-size: 20px;
-            text-align: right;
-            margin-bottom: 10px;
-        }
-
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
-
-        .buttons button {
-            padding: 15px;
-            font-size: 16px;
-        }
-
-        .clock-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .clock {
-            width: 300px;
-            height: 300px;
-            border: 8px solid #333;
-            border-radius: 50%;
-            position: relative;
-            background: white;
-        }
-
-        .hand {
+        .trump {
             position: absolute;
-            width: 50%;
-            background: #333;
-            top: 50%;
-            transform-origin: 100%;
-            transform: rotate(90deg);
-        }
-
-        .hour {
-            height: 6px;
-        }
-
-        .minute {
-            height: 4px;
-        }
-
-        .second {
-            height: 2px;
-            background: red;
-        }
-
-        .mark {
-            position: absolute;
-            width: 4px;
-            height: 20px;
-            background: black;
+            width: 60px;
             top: 0;
-            left: 50%;
-            transform-origin: bottom;
+            animation: move 20s linear infinite;
         }
 
-        .number {
-            position: absolute;
-            font-size: 16px;
-            font-weight: bold;
-            color: black;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        @keyframes move {
+            0%   { transform: translateX(-100px); }
+            100% { transform: translateX(110vw); }
         }
     </style>
 </head>
 <body>
 
-<div class="calculator">
-    <input type="text" id="display" readonly>
-    <div class="buttons">
-        <button onclick="append('1')">1</button>
-        <button onclick="append('2')">2</button>
-        <button onclick="append('3')">3</button>
-        <button onclick="operate('+')">+</button>
-        <button onclick="append('4')">4</button>
-        <button onclick="append('5')">5</button>
-        <button onclick="append('6')">6</button>
-        <button onclick="operate('-')">-</button>
-        <button onclick="append('7')">7</button>
-        <button onclick="append('8')">8</button>
-        <button onclick="append('9')">9</button>
-        <button onclick="operate('/')">/</button>
-        <button onclick="append('0')">0</button>
-        <button onclick="func('sin')">sin</button>
-        <button onclick="func('cos')">cos</button>
-        <button onclick="operate('*')">*</button>
-        <button onclick="func('tan')">tan</button>
-        <button onclick="func('asin')">asin</button>
-        <button onclick="deg()">deg</button>
-        <button onclick="gra()">gra</button>
-        <button onclick="rad()">rad</button>
-        <button onclick="del()">Del</button>
-        <button onclick="reset()">Reset</button>
-        <button onclick="calculate()">=</button>
-    </div>
-</div>
+    <!-- Mehrere Trumps auf unterschiedlichen Höhen -->
+    <img src="trump-pixel.png" class="trump" style="top: 20px; animation-delay: 0s;">
+    <img src="trump-pixel.png" class="trump" style="top: 80px; animation-delay: 5s;">
+    <img src="trump-pixel.png" class="trump" style="top: 140px; animation-delay: 10s;">
+    <img src="trump-pixel.png" class="trump" style="top: 200px; animation-delay: 15s;">
 
-<div class="clock-container">
-    <div class="clock" id="clock">
-        <div class="hand hour" id="hour-hand"></div>
-        <div class="hand minute" id="minute-hand"></div>
-        <div class="hand second" id="second-hand"></div>
-        <!-- Time marks and numbers -->
-        <script>
-            for (let i = 1; i <= 12; i++) {
-                const mark = document.createElement('div');
-                mark.className = 'mark';
-                mark.style.transform = `rotate(${i * 30}deg) translateY(-130px)`;
-                document.getElementById('clock').appendChild(mark);
-
-                const num = document.createElement('div');
-                num.className = 'number';
-                const angle = (i - 3) * 30;
-                const rad = angle * (Math.PI / 180);
-                const x = 130 * Math.cos(rad);
-                const y = 130 * Math.sin(rad);
-                num.style.transform = `translate(${x}px, ${y}px)`;
-                num.textContent = i;
-                document.getElementById('clock').appendChild(num);
-            }
-        </script>
-    </div>
-</div>
-
-<script>
-    function updateClock() {
-        const now = new Date();
-        const second = now.getSeconds();
-        const minute = now.getMinutes();
-        const hour = now.getHours();
-        const secondDeg = (second * 6);
-        const minuteDeg = (minute * 6 + second * 0.1);
-        const hourDeg = ((hour % 12) * 30 + minute * 0.5);
-        document.getElementById('second-hand').style.transform = `rotate(${secondDeg}deg)`;
-        document.getElementById('minute-hand').style.transform = `rotate(${minuteDeg}deg)`;
-        document.getElementById('hour-hand').style.transform = `rotate(${hourDeg}deg)`;
-    }
-
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    let angleMode = "deg";
-
-    function append(value) {
-        document.getElementById("display").value += value;
-    }
-
-    function operate(op) {
-        document.getElementById("display").value += " " + op + " ";
-    }
-
-    function func(f) {
-        let val = parseFloat(document.getElementById("display").value);
-        if (angleMode === "deg") val = val * Math.PI / 180;
-        let result;
-        switch (f) {
-            case "sin": result = Math.sin(val); break;
-            case "cos": result = Math.cos(val); break;
-            case "tan": result = Math.tan(val); break;
-            case "asin": result = Math.asin(val); break;
-        }
-        document.getElementById("display").value = result;
-    }
-
-    function deg() { angleMode = "deg"; alert("Modus: Grad"); }
-    function rad() { angleMode = "rad"; alert("Modus: Radiant"); }
-    function gra() { angleMode = "gra"; alert("Modus: Gon"); }
-
-    function del() {
-        let current = document.getElementById("display").value;
-        document.getElementById("display").value = current.slice(0, -1);
-    }
-
-    function reset() {
-        document.getElementById("display").value = "";
-    }
-
-    function calculate() {
-        try {
-            let result = eval(document.getElementById("display").value);
-            document.getElementById("display").value = result;
-        } catch {
-            document.getElementById("display").value = "Fehler";
-        }
-    }
-</script>
 </body>
 </html>
