@@ -1,273 +1,223 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <title>Uhr mit Taschenrechner</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #1c3563;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <title>Uhr & Taschenrechner</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            display: flex;
+            background-image: url('trump-pixel.png');
+            background-repeat: repeat;
+            background-size: 100px 100px;
+        }
 
-    .container {
-      display: flex;
-      gap: 60px;
-    }
+        .calculator {
+            width: 300px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
 
-    .clock {
-      width: 320px;
-      height: 320px;
-      border: 10px solid white;
-      border-radius: 50%;
-      background: white;
-      position: relative;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-    }
+        .calculator input {
+            width: 100%;
+            height: 50px;
+            font-size: 20px;
+            text-align: right;
+            margin-bottom: 10px;
+        }
 
-    .hand {
-      width: 50%;
-      height: 4px;
-      background: black;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform-origin: 100%;
-      transform: rotate(90deg);
-      transition: all 0.05s ease-in-out;
-    }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
 
-    .hour { height: 6px; background: #333; }
-    .minute { background: #555; }
-    .second { background: #e60000; height: 2px; }
+        .buttons button {
+            padding: 15px;
+            font-size: 16px;
+        }
 
-    .center {
-      width: 12px;
-      height: 12px;
-      background: black;
-      border-radius: 50%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 10;
-    }
+        .clock-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .tick {
-      position: absolute;
-      width: 4px;
-      height: 15px;
-      background: black;
-      top: 50%;
-      left: 50%;
-      transform-origin: center bottom;
-    }
+        .clock {
+            width: 300px;
+            height: 300px;
+            border: 8px solid #333;
+            border-radius: 50%;
+            position: relative;
+            background: white;
+        }
 
-    .number {
-      position: absolute;
-      font-size: 1.2em;
-      font-weight: bold;
-      color: black;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
+        .hand {
+            position: absolute;
+            width: 50%;
+            background: #333;
+            top: 50%;
+            transform-origin: 100%;
+            transform: rotate(90deg);
+        }
 
-    .calculator {
-      background: #f0f0f0;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      color: #000;
-      width: 280px;
-    }
+        .hour {
+            height: 6px;
+        }
 
-    .calculator input {
-      width: 100%;
-      padding: 10px;
-      font-size: 1.2em;
-      text-align: right;
-      margin-bottom: 10px;
-    }
+        .minute {
+            height: 4px;
+        }
 
-    .buttons {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
+        .second {
+            height: 2px;
+            background: red;
+        }
 
-    .buttons button {
-      padding: 10px;
-      font-size: 1em;
-      background: #ddd;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+        .mark {
+            position: absolute;
+            width: 4px;
+            height: 20px;
+            background: black;
+            top: 0;
+            left: 50%;
+            transform-origin: bottom;
+        }
 
-    .buttons button:hover {
-      background: #ccc;
-    }
-
-    .result {
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 1.2em;
-      background: #fff;
-      border: 1px solid #ccc;
-      text-align: right;
-    }
-  </style>
+        .number {
+            position: absolute;
+            font-size: 16px;
+            font-weight: bold;
+            color: black;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Taschenrechner -->
-    <div class="calculator">
-      <h2>Taschenrechner</h2>
-      <input type="text" id="display" readonly />
-      <div class="buttons">
+
+<div class="calculator">
+    <input type="text" id="display" readonly>
+    <div class="buttons">
+        <button onclick="append('1')">1</button>
+        <button onclick="append('2')">2</button>
+        <button onclick="append('3')">3</button>
+        <button onclick="operate('+')">+</button>
+        <button onclick="append('4')">4</button>
+        <button onclick="append('5')">5</button>
+        <button onclick="append('6')">6</button>
+        <button onclick="operate('-')">-</button>
         <button onclick="append('7')">7</button>
         <button onclick="append('8')">8</button>
         <button onclick="append('9')">9</button>
         <button onclick="operate('/')">/</button>
-
-        <button onclick="append('4')">4</button>
-        <button onclick="append('5')">5</button>
-        <button onclick="append('6')">6</button>
-        <button onclick="operate('+')">+</button>
-
-        <button onclick="append('1')">1</button>
-        <button onclick="append('2')">2</button>
-        <button onclick="append('3')">3</button>
-        <button onclick="operate('-')">−</button>
-
         <button onclick="append('0')">0</button>
-        <button onclick="operate('sin')">sin</button>
-        <button onclick="operate('cos')">cos</button>
-        <button onclick="operate('tan')">tan</button>
-
-        <button onclick="operate('asin')">arcsin</button>
-        <button onclick="operate('acos')">arccos</button>
-        <button onclick="operate('atan')">arctan</button>
-        <button onclick="clearDisplay()">C</button>
-
-        <button onclick="backspace()">⌫</button>
-        <button onclick="setUnit('deg')">deg</button>
-        <button onclick="setUnit('rad')">rad</button>
-        <button onclick="setUnit('grad')">grad</button>
-      </div>
-      <div class="result" id="result">=</div>
+        <button onclick="func('sin')">sin</button>
+        <button onclick="func('cos')">cos</button>
+        <button onclick="operate('*')">*</button>
+        <button onclick="func('tan')">tan</button>
+        <button onclick="func('asin')">asin</button>
+        <button onclick="deg()">deg</button>
+        <button onclick="gra()">gra</button>
+        <button onclick="rad()">rad</button>
+        <button onclick="del()">Del</button>
+        <button onclick="reset()">Reset</button>
+        <button onclick="calculate()">=</button>
     </div>
+</div>
 
-    <!-- Uhr -->
+<div class="clock-container">
     <div class="clock" id="clock">
-      <div class="hand hour" id="hour"></div>
-      <div class="hand minute" id="minute"></div>
-      <div class="hand second" id="second"></div>
-      <div class="center"></div>
+        <div class="hand hour" id="hour-hand"></div>
+        <div class="hand minute" id="minute-hand"></div>
+        <div class="hand second" id="second-hand"></div>
+        <!-- Time marks and numbers -->
+        <script>
+            for (let i = 1; i <= 12; i++) {
+                const mark = document.createElement('div');
+                mark.className = 'mark';
+                mark.style.transform = `rotate(${i * 30}deg) translateY(-130px)`;
+                document.getElementById('clock').appendChild(mark);
+
+                const num = document.createElement('div');
+                num.className = 'number';
+                const angle = (i - 3) * 30;
+                const rad = angle * (Math.PI / 180);
+                const x = 130 * Math.cos(rad);
+                const y = 130 * Math.sin(rad);
+                num.style.transform = `translate(${x}px, ${y}px)`;
+                num.textContent = i;
+                document.getElementById('clock').appendChild(num);
+            }
+        </script>
     </div>
-  </div>
+</div>
 
-  <script>
-    let unit = "deg";
-
-    function setUnit(u) {
-      unit = u;
-      document.getElementById("result").innerText = `Winkeleinheit: ${u}`;
+<script>
+    function updateClock() {
+        const now = new Date();
+        const second = now.getSeconds();
+        const minute = now.getMinutes();
+        const hour = now.getHours();
+        const secondDeg = (second * 6);
+        const minuteDeg = (minute * 6 + second * 0.1);
+        const hourDeg = ((hour % 12) * 30 + minute * 0.5);
+        document.getElementById('second-hand').style.transform = `rotate(${secondDeg}deg)`;
+        document.getElementById('minute-hand').style.transform = `rotate(${minuteDeg}deg)`;
+        document.getElementById('hour-hand').style.transform = `rotate(${hourDeg}deg)`;
     }
 
-    function append(val) {
-      const display = document.getElementById("display");
-      display.value += val;
-    }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    function clearDisplay() {
-      document.getElementById("display").value = "";
-      document.getElementById("result").innerText = "=";
-    }
+    let angleMode = "deg";
 
-    function backspace() {
-      const display = document.getElementById("display");
-      display.value = display.value.slice(0, -1);
+    function append(value) {
+        document.getElementById("display").value += value;
     }
 
     function operate(op) {
-      let input = parseFloat(document.getElementById("display").value);
-      if (isNaN(input)) {
-        document.getElementById("result").innerText = "Ungültig";
-        return;
-      }
-
-      const degToRad = x => x * Math.PI / 180;
-      const gradToRad = x => x * Math.PI / 200;
-      const convertInput = () => {
-        if (unit === "deg") return degToRad(input);
-        if (unit === "grad") return gradToRad(input);
-        return input;
-      };
-
-      const radToDeg = x => x * 180 / Math.PI;
-      const radToGrad = x => x * 200 / Math.PI;
-      const convertOutput = x => {
-        if (unit === "deg") return radToDeg(x);
-        if (unit === "grad") return radToGrad(x);
-        return x;
-      };
-
-      let result;
-      switch (op) {
-        case '+': result = input + input; break;
-        case '-': result = input - input; break;
-        case '/': result = input !== 0 ? input / input : "∞"; break;
-        case 'sin': result = Math.sin(convertInput()).toFixed(4); break;
-        case 'cos': result = Math.cos(convertInput()).toFixed(4); break;
-        case 'tan': result = Math.tan(convertInput()).toFixed(4); break;
-        case 'asin': result = convertOutput(Math.asin(input)).toFixed(2); break;
-        case 'acos': result = convertOutput(Math.acos(input)).toFixed(2); break;
-        case 'atan': result = convertOutput(Math.atan(input)).toFixed(2); break;
-        default: result = "Fehler";
-      }
-
-      document.getElementById("result").innerText = "= " + result;
+        document.getElementById("display").value += " " + op + " ";
     }
 
-    // Uhr initialisieren
-    const clock = document.getElementById('clock');
-    for (let i = 0; i < 12; i++) {
-      const tick = document.createElement('div');
-      tick.className = 'tick';
-      tick.style.transform = `rotate(${i * 30}deg) translateY(-140px)`;
-      clock.appendChild(tick);
+    function func(f) {
+        let val = parseFloat(document.getElementById("display").value);
+        if (angleMode === "deg") val = val * Math.PI / 180;
+        let result;
+        switch (f) {
+            case "sin": result = Math.sin(val); break;
+            case "cos": result = Math.cos(val); break;
+            case "tan": result = Math.tan(val); break;
+            case "asin": result = Math.asin(val); break;
+        }
+        document.getElementById("display").value = result;
     }
 
-    for (let i = 1; i <= 12; i++) {
-      const number = document.createElement('div');
-      number.className = 'number';
-      const angle = (i * 30 - 90) * Math.PI / 180;
-      const radius = 115;
-      const x = radius * Math.cos(angle);
-      const y = radius * Math.sin(angle);
-      number.style.left = `calc(50% + ${x}px)`;
-      number.style.top = `calc(50% + ${y}px)`;
-      number.textContent = i;
-      clock.appendChild(number);
+    function deg() { angleMode = "deg"; alert("Modus: Grad"); }
+    function rad() { angleMode = "rad"; alert("Modus: Radiant"); }
+    function gra() { angleMode = "gra"; alert("Modus: Gon"); }
+
+    function del() {
+        let current = document.getElementById("display").value;
+        document.getElementById("display").value = current.slice(0, -1);
     }
 
-    function updateClock() {
-      const now = new Date();
-      const s = now.getSeconds(), m = now.getMinutes(), h = now.getHours();
-      document.getElementById('second').style.transform = `rotate(${s * 6 + 90}deg)`;
-      document.getElementById('minute').style.transform = `rotate(${m * 6 + s * 0.1 + 90}deg)`;
-      document.getElementById('hour').style.transform = `rotate(${(h % 12) * 30 + m * 0.5 + 90}deg)`;
+    function reset() {
+        document.getElementById("display").value = "";
     }
-    setInterval(updateClock, 1000);
-    updateClock();
-  </script>
+
+    function calculate() {
+        try {
+            let result = eval(document.getElementById("display").value);
+            document.getElementById("display").value = result;
+        } catch {
+            document.getElementById("display").value = "Fehler";
+        }
+    }
+</script>
 </body>
 </html>
