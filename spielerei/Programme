@@ -10,7 +10,7 @@ pm2 => auto start
 nginx 
     sudo systemctl enable nginx
     sudo systemctl start nginx
-
+    sudo nginx -t
     
     sudo chmod o+x /home/lbraun
     sudo chmod o+x /home/lbraun/Watering
@@ -57,3 +57,6 @@ Zielhost nicht erreichbar.
 Ping-Statistik für 2a02:3102:6894:5200:3e04:6d1d:4553:25c8:
     Pakete: Gesendet = 4, Empfangen = 0, Verloren = 4
     (100% Verlust),
+
+
+flask blueprint
