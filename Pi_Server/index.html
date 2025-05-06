@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Analoge Uhr</title>
+  <title>Uhr mit Taschenrechner</title>
   <style>
     body {
       margin: 0;
@@ -12,6 +12,13 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      gap: 60px;
     }
 
     .clock {
@@ -36,19 +43,9 @@
       transition: all 0.05s ease-in-out;
     }
 
-    .hour {
-      height: 6px;
-      background: #333;
-    }
-
-    .minute {
-      background: #555;
-    }
-
-    .second {
-      background: #e60000;
-      height: 2px;
-    }
+    .hour { height: 6px; background: #333; }
+    .minute { background: #555; }
+    .second { background: #e60000; height: 2px; }
 
     .center {
       width: 12px;
@@ -81,32 +78,82 @@
       left: 50%;
       transform: translate(-50%, -50%);
     }
+
+    .calculator {
+      background: #f0f0f0;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      color: #000;
+      width: 260px;
+    }
+
+    .calculator input, .calculator button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 1em;
+    }
+
+    .functions {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .calculator .result {
+      background: #fff;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 1.2em;
+      text-align: right;
+      border: 1px solid #ccc;
+    }
   </style>
 </head>
 <body>
-  <div class="clock" id="clock">
-    <div class="hand hour" id="hour"></div>
-    <div class="hand minute" id="minute"></div>
-    <div class="hand second" id="second"></div>
-    <div class="center"></div>
+  <div class="container">
+    <!-- Taschenrechner -->
+    <div class="calculator">
+      <h2>Taschenrechner</h2>
+      <input type="text" id="inputValue" placeholder="Zahl eingeben (Grad für trig.)">
+      <div class="functions">
+        <button onclick="operate('+')">+</button>
+        <button onclick="operate('-')">−</button>
+        <button onclick="operate('/')">/</button>
+        <button onclick="operate('sin')">sin</button>
+        <button onclick="operate('cos')">cos</button>
+        <button onclick="operate('tan')">tan</button>
+        <button onclick="operate('asin')">arcsin</button>
+        <button onclick="operate('acos')">arccos</button>
+        <button onclick="operate('atan')">arctan</button>
+      </div>
+      <div class="result" id="result">=</div>
+    </div>
+
+    <!-- Uhr -->
+    <div class="clock" id="clock">
+      <div class="hand hour" id="hour"></div>
+      <div class="hand minute" id="minute"></div>
+      <div class="hand second" id="second"></div>
+      <div class="center"></div>
+    </div>
   </div>
 
   <script>
+    // Uhr initialisieren
     const clock = document.getElementById('clock');
-
-    // Stundenstriche (12 Ticks)
     for (let i = 0; i < 12; i++) {
       const tick = document.createElement('div');
       tick.className = 'tick';
-      tick.style.transform = `rotate(${i * 30}deg) translateY(-140px)`; // korrekt entlang Radius
+      tick.style.transform = `rotate(${i * 30}deg) translateY(-140px)`;
       clock.appendChild(tick);
     }
-
-    // Zahlen (1 bis 12)
     for (let i = 1; i <= 12; i++) {
       const number = document.createElement('div');
       number.className = 'number';
-      const angle = (i * 30 - 90) * (Math.PI / 180); // -90° Offset für 12 Uhr oben
+      const angle = (i * 30 - 90) * (Math.PI / 180);
       const radius = 115;
       const x = radius * Math.cos(angle);
       const y = radius * Math.sin(angle);
@@ -115,24 +162,61 @@
       number.textContent = i;
       clock.appendChild(number);
     }
-
     function updateClock() {
       const now = new Date();
-      const second = now.getSeconds();
-      const minute = now.getMinutes();
-      const hour = now.getHours();
-
-      const secondDeg = second * 6 + 90;
-      const minuteDeg = minute * 6 + second * 0.1 + 90;
-      const hourDeg = (hour % 12) * 30 + (minute / 60) * 30 + 90;
-
-      document.getElementById('second').style.transform = `rotate(${secondDeg}deg)`;
-      document.getElementById('minute').style.transform = `rotate(${minuteDeg}deg)`;
-      document.getElementById('hour').style.transform = `rotate(${hourDeg}deg)`;
+      const s = now.getSeconds(), m = now.getMinutes(), h = now.getHours();
+      document.getElementById('second').style.transform = `rotate(${s * 6 + 90}deg)`;
+      document.getElementById('minute').style.transform = `rotate(${m * 6 + s * 0.1 + 90}deg)`;
+      document.getElementById('hour').style.transform = `rotate(${(h % 12) * 30 + (m / 60) * 30 + 90}deg)`;
     }
-
     setInterval(updateClock, 1000);
-    updateClock(); // initialer Aufruf
+    updateClock();
+
+    // Taschenrechner-Funktionen
+    function operate(op) {
+      const input = parseFloat(document.getElementById('inputValue').value);
+      if (isNaN(input)) {
+        document.getElementById('result').innerText = 'Ungültige Eingabe';
+        return;
+      }
+
+      let result;
+      const degToRad = (deg) => deg * (Math.PI / 180);
+      const radToDeg = (rad) => rad * (180 / Math.PI);
+
+      switch (op) {
+        case '+':
+          result = input + input;
+          break;
+        case '-':
+          result = input - input;
+          break;
+        case '/':
+          result = input === 0 ? 'Unendlich' : input / input;
+          break;
+        case 'sin':
+          result = Math.sin(degToRad(input)).toFixed(4);
+          break;
+        case 'cos':
+          result = Math.cos(degToRad(input)).toFixed(4);
+          break;
+        case 'tan':
+          result = Math.tan(degToRad(input)).toFixed(4);
+          break;
+        case 'asin':
+          result = radToDeg(Math.asin(input)).toFixed(2);
+          break;
+        case 'acos':
+          result = radToDeg(Math.acos(input)).toFixed(2);
+          break;
+        case 'atan':
+          result = radToDeg(Math.atan(input)).toFixed(2);
+          break;
+        default:
+          result = 'Unbekannt';
+      }
+      document.getElementById('result').innerText = '= ' + result;
+    }
   </script>
 </body>
 </html>
