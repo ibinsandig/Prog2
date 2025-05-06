@@ -21,15 +21,48 @@
             0%   { transform: translateX(-100px); }
             100% { transform: translateX(110vw); }
         }
+
     </style>
 </head>
 <body>
 
-    <!-- Mehrere Trumps auf unterschiedlichen Höhen -->
-    <img src="trump-pixel.png" class="trump" style="top: 20px; animation-delay: 0s;">
-    <img src="trump-pixel.png" class="trump" style="top: 80px; animation-delay: 5s;">
-    <img src="trump-pixel.png" class="trump" style="top: 140px; animation-delay: 10s;">
-    <img src="trump-pixel.png" class="trump" style="top: 200px; animation-delay: 15s;">
+    <!-- Anfang nur ein Trump -->
+    <img src="trump-pixel.png" class="trump" id="trump-1" style="top: 20px; animation-delay: 0s;">
+
+    <script>
+        // Zähler, um die IDs der Trumps zu verwalten
+        let trumpCount = 1;
+
+        // Funktion, um einen neuen Trump zu erstellen und hinzuzufügen
+        function addTrump() {
+            trumpCount++; // Erhöht die Anzahl der Trumps
+
+            // Erstelle ein neues Bild-Element für Trump
+            const trump = document.createElement("img");
+            trump.src = "trump-pixel.png";
+            trump.className = "trump";
+            trump.style.top = `${Math.random() * window.innerHeight}px`;  // Zufällige Höhe
+            trump.style.animationDelay = `${Math.random() * 5}s`; // Zufällige Animation Verzögerung
+
+            // Berechne zufällige Richtung (in diesem Fall 45 Grad)
+            const angle = Math.random() > 0.5 ? 45 : -45; // 45 oder -45 Grad
+
+            // Wende eine Transformation an, um die Trumps in einem 45-Grad-Winkel zu bewegen
+            trump.style.transform = `rotate(${angle}deg)`; // Dreht das Bild für den 45-Grad-Winkel
+
+            // Füge den neuen Trump zum Body hinzu
+            document.body.appendChild(trump);
+
+            // Verändere das ID-Attribut für die Nachverfolgung
+            trump.id = `trump-${trumpCount}`;
+
+            // Wenn der Trump den Rand berührt, fügen wir einen weiteren hinzu
+            trump.addEventListener('animationiteration', addTrump);
+        }
+
+        // Füge den ersten Trump hinzu
+        addTrump();
+    </script>
 
 </body>
 </html>
