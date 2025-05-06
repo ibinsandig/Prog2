@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Analoge Uhr</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
+      background-color: #1c3563;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #1c3563;
-      margin: 0;
     }
 
     .clock {
-      width: 300px;
-      height: 300px;
+      width: 320px;
+      height: 320px;
       border: 10px solid white;
       border-radius: 50%;
-      position: relative;
       background: white;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      position: relative;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     }
 
     .hand {
@@ -59,10 +60,30 @@
       transform: translate(-50%, -50%);
       z-index: 10;
     }
+
+    .tick {
+      position: absolute;
+      width: 4px;
+      height: 15px;
+      background: black;
+      top: 0;
+      left: 50%;
+      transform-origin: bottom center;
+    }
+
+    .number {
+      position: absolute;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: black;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   </style>
 </head>
 <body>
-  <div class="clock">
+  <div class="clock" id="clock">
     <div class="hand hour" id="hour"></div>
     <div class="hand minute" id="minute"></div>
     <div class="hand second" id="second"></div>
@@ -70,19 +91,43 @@
   </div>
 
   <script>
+    const clock = document.getElementById('clock');
+
+    // Stundenstriche (12 Ticks)
+    for (let i = 0; i < 12; i++) {
+      const tick = document.createElement('div');
+      tick.className = 'tick';
+      tick.style.transform = `rotate(${i * 30}deg) translate(-50%, 0)`;
+      clock.appendChild(tick);
+    }
+
+    // Zahlen (1 bis 12)
+    for (let i = 1; i <= 12; i++) {
+      const number = document.createElement('div');
+      number.className = 'number';
+      const angle = (i * 30 - 90) * (Math.PI / 180); // -90° Offset für 12 Uhr oben
+      const radius = 130; // Abstand vom Mittelpunkt
+      const x = radius * Math.cos(angle);
+      const y = radius * Math.sin(angle);
+      number.style.left = `calc(50% + ${x}px)`;
+      number.style.top = `calc(50% + ${y}px)`;
+      number.textContent = i;
+      clock.appendChild(number);
+    }
+
     function updateClock() {
       const now = new Date();
       const second = now.getSeconds();
       const minute = now.getMinutes();
       const hour = now.getHours();
 
-      const secondDeg = (second * 6) + 90;
-      const minuteDeg = (minute * 6 + second * 0.1) + 90;
-      const hourDeg = (((hour % 12) / 12) * 360 + (minute / 60) * 30) + 90;
+      const secondDeg = second * 6 + 90;
+      const minuteDeg = minute * 6 + second * 0.1 + 90;
+      const hourDeg = (hour % 12) * 30 + (minute / 60) * 30 + 90;
 
-      document.getElementById('hour').style.transform = `rotate(${hourDeg}deg)`;
-      document.getElementById('minute').style.transform = `rotate(${minuteDeg}deg)`;
       document.getElementById('second').style.transform = `rotate(${secondDeg}deg)`;
+      document.getElementById('minute').style.transform = `rotate(${minuteDeg}deg)`;
+      document.getElementById('hour').style.transform = `rotate(${hourDeg}deg)`;
     }
 
     setInterval(updateClock, 1000);
