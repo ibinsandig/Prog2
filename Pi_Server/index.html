@@ -85,30 +85,43 @@
       border-radius: 15px;
       box-shadow: 0 0 15px rgba(0,0,0,0.2);
       color: #000;
-      width: 260px;
+      width: 280px;
     }
 
-    .calculator input, .calculator button {
+    .calculator input {
       width: 100%;
       padding: 10px;
-      margin-top: 10px;
-      font-size: 1em;
-    }
-
-    .functions {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .calculator .result {
-      background: #fff;
-      padding: 10px;
-      margin-top: 10px;
       font-size: 1.2em;
       text-align: right;
+      margin-bottom: 10px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .buttons button {
+      padding: 10px;
+      font-size: 1em;
+      background: #ddd;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .buttons button:hover {
+      background: #ccc;
+    }
+
+    .result {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 1.2em;
+      background: #fff;
       border: 1px solid #ccc;
+      text-align: right;
     }
   </style>
 </head>
@@ -117,17 +130,37 @@
     <!-- Taschenrechner -->
     <div class="calculator">
       <h2>Taschenrechner</h2>
-      <input type="text" id="inputValue" placeholder="Zahl eingeben (Grad für trig.)">
-      <div class="functions">
-        <button onclick="operate('+')">+</button>
-        <button onclick="operate('-')">−</button>
+      <input type="text" id="display" readonly />
+      <div class="buttons">
+        <button onclick="append('7')">7</button>
+        <button onclick="append('8')">8</button>
+        <button onclick="append('9')">9</button>
         <button onclick="operate('/')">/</button>
+
+        <button onclick="append('4')">4</button>
+        <button onclick="append('5')">5</button>
+        <button onclick="append('6')">6</button>
+        <button onclick="operate('+')">+</button>
+
+        <button onclick="append('1')">1</button>
+        <button onclick="append('2')">2</button>
+        <button onclick="append('3')">3</button>
+        <button onclick="operate('-')">−</button>
+
+        <button onclick="append('0')">0</button>
         <button onclick="operate('sin')">sin</button>
         <button onclick="operate('cos')">cos</button>
         <button onclick="operate('tan')">tan</button>
+
         <button onclick="operate('asin')">arcsin</button>
         <button onclick="operate('acos')">arccos</button>
         <button onclick="operate('atan')">arctan</button>
+        <button onclick="clearDisplay()">C</button>
+
+        <button onclick="backspace()">⌫</button>
+        <button onclick="setUnit('deg')">deg</button>
+        <button onclick="setUnit('rad')">rad</button>
+        <button onclick="setUnit('grad')">grad</button>
       </div>
       <div class="result" id="result">=</div>
     </div>
@@ -142,6 +175,68 @@
   </div>
 
   <script>
+    let unit = "deg";
+
+    function setUnit(u) {
+      unit = u;
+      document.getElementById("result").innerText = `Winkeleinheit: ${u}`;
+    }
+
+    function append(val) {
+      const display = document.getElementById("display");
+      display.value += val;
+    }
+
+    function clearDisplay() {
+      document.getElementById("display").value = "";
+      document.getElementById("result").innerText = "=";
+    }
+
+    function backspace() {
+      const display = document.getElementById("display");
+      display.value = display.value.slice(0, -1);
+    }
+
+    function operate(op) {
+      let input = parseFloat(document.getElementById("display").value);
+      if (isNaN(input)) {
+        document.getElementById("result").innerText = "Ungültig";
+        return;
+      }
+
+      const degToRad = x => x * Math.PI / 180;
+      const gradToRad = x => x * Math.PI / 200;
+      const convertInput = () => {
+        if (unit === "deg") return degToRad(input);
+        if (unit === "grad") return gradToRad(input);
+        return input;
+      };
+
+      const radToDeg = x => x * 180 / Math.PI;
+      const radToGrad = x => x * 200 / Math.PI;
+      const convertOutput = x => {
+        if (unit === "deg") return radToDeg(x);
+        if (unit === "grad") return radToGrad(x);
+        return x;
+      };
+
+      let result;
+      switch (op) {
+        case '+': result = input + input; break;
+        case '-': result = input - input; break;
+        case '/': result = input !== 0 ? input / input : "∞"; break;
+        case 'sin': result = Math.sin(convertInput()).toFixed(4); break;
+        case 'cos': result = Math.cos(convertInput()).toFixed(4); break;
+        case 'tan': result = Math.tan(convertInput()).toFixed(4); break;
+        case 'asin': result = convertOutput(Math.asin(input)).toFixed(2); break;
+        case 'acos': result = convertOutput(Math.acos(input)).toFixed(2); break;
+        case 'atan': result = convertOutput(Math.atan(input)).toFixed(2); break;
+        default: result = "Fehler";
+      }
+
+      document.getElementById("result").innerText = "= " + result;
+    }
+
     // Uhr initialisieren
     const clock = document.getElementById('clock');
     for (let i = 0; i < 12; i++) {
@@ -150,10 +245,11 @@
       tick.style.transform = `rotate(${i * 30}deg) translateY(-140px)`;
       clock.appendChild(tick);
     }
+
     for (let i = 1; i <= 12; i++) {
       const number = document.createElement('div');
       number.className = 'number';
-      const angle = (i * 30 - 90) * (Math.PI / 180);
+      const angle = (i * 30 - 90) * Math.PI / 180;
       const radius = 115;
       const x = radius * Math.cos(angle);
       const y = radius * Math.sin(angle);
@@ -162,61 +258,16 @@
       number.textContent = i;
       clock.appendChild(number);
     }
+
     function updateClock() {
       const now = new Date();
       const s = now.getSeconds(), m = now.getMinutes(), h = now.getHours();
       document.getElementById('second').style.transform = `rotate(${s * 6 + 90}deg)`;
       document.getElementById('minute').style.transform = `rotate(${m * 6 + s * 0.1 + 90}deg)`;
-      document.getElementById('hour').style.transform = `rotate(${(h % 12) * 30 + (m / 60) * 30 + 90}deg)`;
+      document.getElementById('hour').style.transform = `rotate(${(h % 12) * 30 + m * 0.5 + 90}deg)`;
     }
     setInterval(updateClock, 1000);
     updateClock();
-
-    // Taschenrechner-Funktionen
-    function operate(op) {
-      const input = parseFloat(document.getElementById('inputValue').value);
-      if (isNaN(input)) {
-        document.getElementById('result').innerText = 'Ungültige Eingabe';
-        return;
-      }
-
-      let result;
-      const degToRad = (deg) => deg * (Math.PI / 180);
-      const radToDeg = (rad) => rad * (180 / Math.PI);
-
-      switch (op) {
-        case '+':
-          result = input + input;
-          break;
-        case '-':
-          result = input - input;
-          break;
-        case '/':
-          result = input === 0 ? 'Unendlich' : input / input;
-          break;
-        case 'sin':
-          result = Math.sin(degToRad(input)).toFixed(4);
-          break;
-        case 'cos':
-          result = Math.cos(degToRad(input)).toFixed(4);
-          break;
-        case 'tan':
-          result = Math.tan(degToRad(input)).toFixed(4);
-          break;
-        case 'asin':
-          result = radToDeg(Math.asin(input)).toFixed(2);
-          break;
-        case 'acos':
-          result = radToDeg(Math.acos(input)).toFixed(2);
-          break;
-        case 'atan':
-          result = radToDeg(Math.atan(input)).toFixed(2);
-          break;
-        default:
-          result = 'Unbekannt';
-      }
-      document.getElementById('result').innerText = '= ' + result;
-    }
   </script>
 </body>
 </html>
