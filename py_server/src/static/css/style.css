@@ -1,0 +1,12 @@
+h1{
+    color: red;
+}
+.imp-class{
+    color: blue;
+    font-size: 40px;
+}
+
+body{
+    background-image: url('../img/shiphouse.jpg');
+    background-size: cover;
+}
