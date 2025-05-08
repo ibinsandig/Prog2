@@ -9,4 +9,6 @@ h1{
 body{
     background-image: url(src/static/img/shiphouse.jpg);
     background-position: center;
+    background-repeat: no-repeat; /* Verhindert Wiederholung des Bildes */
+    background-size: cover; /* Passt das Bild an, um den gesamten Hintergrund zu füllen */
 }
