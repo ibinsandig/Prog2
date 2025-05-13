@@ -4,3 +4,9 @@ Aufgabe	Software / Tool
 
 MQTT-Kommunikation	umqtt.simple oder umqtt.robust (MicroPython-intern)
 WiFi-Verbindung & Sensorsteuerung, Pumpensteuerung	Im MicroPython-Code integriert
+
+
+Aktivieren des venv
+
+cd py_server
+source
