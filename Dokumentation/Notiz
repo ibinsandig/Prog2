@@ -8,5 +8,23 @@ WiFi-Verbindung & Sensorsteuerung, Pumpensteuerung	Im MicroPython-Code integrier
 
 Aktivieren des venv
 
-cd py_server
-source
+    cd py_server/
+    source Scripts/activate
+
+Ordner nach oben bewegen
+
+    cd ../
+
+Installieren von fehlenden Paketen
+
+    pip install [anwendung]
+
+
+Server_Website starten 
+
+    directory ./py_server/src
+    source server.py
+
+Website öffnen
+
+    localhost:3000
