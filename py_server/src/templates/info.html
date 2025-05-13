@@ -1,15 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>ESP8266 Bedienpanel</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <h1>Info</h1>
-    <button onclick="ZurMainpage()">Zurück zur Startpage</button>
+    <h1>ESP8266 Bedienpanel</h1>
     
+    <div class="status">
+        <p>Verbindungsstatus: <span id="connection-status">Nicht verbunden</span></p>
+        <p>IP-Adresse: <span id="device-ip">---</span></p>
+    </div>
+
+    <div class="control">
+        <h2>Pumpenstatus</h2>
+        <p>Aktivität: <span id="pump-status">Aus</span></p>
+        <p>Menge ausgegeben: <span id="water-amount">0 L</span></p>
+        <button onclick="togglePump()">Pumpe ein/aus</button>
+    </div>
+
+    <div class="sensor">
+        <h2>Feuchtigkeitssensor</h2>
+        <p>Status: <span id="humidity-status">---</span></p>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
