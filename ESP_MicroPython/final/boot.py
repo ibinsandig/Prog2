@@ -1,7 +1,7 @@
 import machine # type: ignore
 import time
 import network # type: ignore
-import uqmtt
+import socket
 
 # WLAN-Station-Modus aktivieren
 wlan = network.WLAN(network.STA_IF)
