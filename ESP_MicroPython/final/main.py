@@ -16,7 +16,6 @@ sensor_analog = ADC(0)
 sensor_digital = Pin(4, Pin.IN)
 
 pump = Pin(5, Pin.OUT) 
-pump.off()
 
 # Globale Variablen
 
@@ -70,7 +69,7 @@ async def control_pump(state, pump_time):
         if state == 1:
             pump.on()
             print("Starte Pumpzyklus")
-            blink_led(pump_time)
+            await blink_led(pump_time)
             await asyncio.sleep(pump_time)
             pump.off()
             print("Stoppe Pumpzyklus")
@@ -79,18 +78,19 @@ async def control_pump(state, pump_time):
 
 # check sensor_digital
 async def check_sensor_digital():
+    global status_pump  
     while True:
         if data_digital == 1:
             print("Sensorwert digital: 1")
             status_pump = 1
         else:
             print("Sensorwert digital: 0")
-            
+            status_pump = 0  
         await asyncio.sleep(1)
 
 # check sensor_analog
 async def check_sensor_analog():
-    global data_analog
+    global status_pump
     while True:
         if data_analog < trigger:
             print("Sensorwert analog: {trigger}")
@@ -121,9 +121,11 @@ async def publish_data():
 async def main():
     asyncio.create_task(read_sensor())
     asyncio.create_task(check_sensor_digital())
-    asyncio.create_task(control_pump)
-    asyncio.create_task(publish_data())
+    pump_control = asyncio.create_task(control_pump(status_pump, pump_time))
     while True:
+        # Aktualisiere pump_control mit aktuellem status_pump
+        if pump_control.done():
+            pump_control = asyncio.create_task(control_pump(status_pump, pump_time))
         await asyncio.sleep(1)
 
 # Starte die Event-Loop
