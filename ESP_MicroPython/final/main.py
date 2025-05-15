@@ -1,6 +1,5 @@
-from machine import Pin, ADC
-import uasyncio as asyncio
-import umqtt.simple as mqtt_client
+from machine import Pin, ADC #typing: ignore
+import umqtt.simple as mqtt_client #typing: ignore
 import time
 # Konfiguration
 MQTT_BROKER = "10.78.162.167"
@@ -19,8 +18,8 @@ pump = Pin(5, Pin.OUT)
 
 # Globale Variablen
 
-data_analog = 0
-data_digital = 0
+#data_analog = 0
+#data_digital = 0
 
 status_pump = 0
 
@@ -43,90 +42,14 @@ def connect_mqtt():
 
 client = connect_mqtt()
 
-# blink LED
-async def blink_led(time):
-    while time > 0:
-        led_green.on()
-        await asyncio.sleep(0.3)
-        led_green.off()
-        await asyncio.sleep(0.3)
-        time -= 1
-
-#read sensor
-async def read_sensor():
-    global data_analog
-    global data_digital
+def run_watering():
     while True:
-        data_analog = sensor_analog.read()
-        data_digital = sensor_digital.value()
-        print(f"Sensorwert analog: {data_analog}, Sensorwert digital: {data_digital}")
-        await asyncio.sleep(0.9)
-        
-# pump steuern
-async def control_pump(state, pump_time):
-    global pump
-    while True:
-        if state == 1:
+        if sensor_digital.value() == 1 or status_pump == 1:  # '|' durch 'or' ersetzt
+            print(f"Pumpe an für {pump_time} sek")  # String-Formatierung korrigiert
             pump.on()
-            print("Starte Pumpzyklus")
-            await blink_led(pump_time)
-            await asyncio.sleep(pump_time)
+            time.sleep(pump_time)  # Sleep nach pump.on() eingefügt
+        
+        elif sensor_digital.value() == 0 and status_pump == 0:  # '&' durch 'and' ersetzt
             pump.off()
-            print("Stoppe Pumpzyklus")
-        else:
-            await asyncio.sleep(pump_time_stop)
-
-# check sensor_digital
-async def check_sensor_digital():
-    global status_pump  
-    while True:
-        if data_digital == 1:
-            print("Sensorwert digital: 1")
-            status_pump = 1
-        else:
-            print("Sensorwert digital: 0")
-            status_pump = 0  
-        await asyncio.sleep(1)
-
-# check sensor_analog
-async def check_sensor_analog():
-    global status_pump
-    while True:
-        if data_analog < trigger:
-            print("Sensorwert analog: {trigger}")
-            status_pump = 1
-        else:
-            print("Sensorwert analog: {trigger}")
-            status_pump = 0
         
-        await asyncio.sleep(1)
-        
-# Aufgabe: MQTT-Publish alle 5 Sek
-async def publish_data():
-    global client
-    while True:
-        try:
-            if client is None:
-                client = connect_mqtt()
-            if client:
-                message = str(data_analog).encode()
-                client.publish(MQTT_TOPIC_PUB, message)
-                print(f"MQTT gesendet: {data_analog}")
-        except Exception as e:
-            print(f"MQTT-Fehler: {e}")
-            client = None
-        await asyncio.sleep(5)
-
-# Hauptfunktion
-async def main():
-    asyncio.create_task(read_sensor())
-    asyncio.create_task(check_sensor_digital())
-    pump_control = asyncio.create_task(control_pump(status_pump, pump_time))
-    while True:
-        # Aktualisiere pump_control mit aktuellem status_pump
-        if pump_control.done():
-            pump_control = asyncio.create_task(control_pump(status_pump, pump_time))
-        await asyncio.sleep(1)
-
-# Starte die Event-Loop
-asyncio.run(main())  # Hier startet der Event-Loop
+        time.sleep(pump_time_stop)  # Einrückung korrigiert, else: entfernt
