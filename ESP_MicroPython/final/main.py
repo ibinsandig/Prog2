@@ -89,13 +89,15 @@ def run_watering():
     
         if sensor_digital.value() == 1 or status_pump == 1:
             print(f"Pumpe an für {pump_time} sek")
+            led_green.on()
             data_digital = 1
             pump.on()
             time.sleep(pump_time)  # Sleep nach pump.on() eingefügt
-
+            
         
         elif sensor_digital.value() == 0 and status_pump == 0:
             pump.off()
+            led_green.off()
             data_digital = 0
         time.sleep(pump_time_stop)
 
