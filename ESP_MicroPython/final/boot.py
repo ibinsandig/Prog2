@@ -12,6 +12,9 @@ print("Verbinde mit WLAN...")
 ssid = "WehLan"
 password = "1234wlan5678"
 
+# ssid = "Lochbox"
+# password = ""
+
 # Warten, bis die Verbindung hergestellt ist
 while not wlan.isconnected():
     pass

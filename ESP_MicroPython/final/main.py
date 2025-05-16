@@ -2,7 +2,17 @@ from machine import Pin, ADC #typing: ignore
 from umqtt.simple import MQTTClient #typing: ignore
 import time
 # Konfiguration
-MQTT_BROKER = "10.78.162.167"
+MQTT_BROKER = "192.168.178.21" 
+    
+    #zero
+
+    #"10.78.162.167"
+
+
+
+    #RPi4
+    #"192.168.178.21" 
+    #"10.78.162.224"
 MQTT_PORT = 1883
 MQTT_TOPIC_PUB = b'watering/status'
 MQTT_TOPIC_SUB = b'watering/control'
