@@ -8,9 +8,9 @@ wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
 
 # Mit WLAN verbinden
+print("Verbinde mit WLAN...")
 ssid = "WehLan"
 password = "1234wlan5678"
-wlan.connect(ssid, password)
 
 # Warten, bis die Verbindung hergestellt ist
 while not wlan.isconnected():

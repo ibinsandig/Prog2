@@ -1,5 +1,5 @@
 from machine import Pin, ADC #typing: ignore
-import umqtt.simple as mqtt_client #typing: ignore
+from umqtt.simple import MQTTClient #typing: ignore
 import time
 # Konfiguration
 MQTT_BROKER = "10.78.162.167"
@@ -19,7 +19,7 @@ pump = Pin(5, Pin.OUT)
 # Globale Variablen
 
 #data_analog = 0
-#data_digital = 0
+data_digital = 0
 
 status_pump = 0
 
@@ -29,27 +29,74 @@ pump_time = 3
 
 pump_time_stop = 3
 
+# Callback-Funktion für empfangene Nachrichten
+def callback(topic, msg):
+    global status_pump
+    
+    print(f"Nachricht empfangen:")
+    topic = topic.decode()
+    print(f"Topic: {topic}")
+    message = msg.decode()
+    print(f"Nachricht: {message}")
+
+    if message == "on":
+        status_pump = 1
+        led_green.on()
+        print("Pumpe eingeschaltet")
+    elif message == "off":
+        status_pump = 0
+        led_green.off()
+        print("Pumpe ausgeschaltet")
+
+
 # MQTT-Verbindung
 def connect_mqtt():
     try:
-        client = mqtt_client.MQTTClient("ESP8266", MQTT_BROKER, MQTT_PORT)
+        client = MQTTClient("ESP8266", MQTT_BROKER, port=MQTT_PORT)
+        client.set_callback(callback)
         client.connect()
+        client.subscribe(MQTT_TOPIC_SUB)
         print("MQTT verbunden")
         return client
     except Exception as e:
         print(f"MQTT-Verbindung fehlgeschlagen: {e}")
         return None
 
+
 client = connect_mqtt()
 
+
+
 def run_watering():
+    global client
     while True:
-        if sensor_digital.value() == 1 or status_pump == 1:  # '|' durch 'or' ersetzt
-            print(f"Pumpe an für {pump_time} sek")  # String-Formatierung korrigiert
+        try:
+            if client:
+                client.check_msg()  # Prüfe auf neue MQTT-Nachrichten
+            else:
+                # Versuche Neuverbindung
+                try:
+                    client = connect_mqtt()
+                except:
+                    pass
+                    
+            time.sleep(5) # Warte 5 Sekunden zwischen den Status-Updates
+            
+        except Exception as e:
+            print('Fehler in Hauptschleife:', e)
+            time.sleep(5)
+            client = None
+    
+        if sensor_digital.value() == 1 or status_pump == 1:
+            print(f"Pumpe an für {pump_time} sek")
+            data_digital = 1
             pump.on()
             time.sleep(pump_time)  # Sleep nach pump.on() eingefügt
+
         
-        elif sensor_digital.value() == 0 and status_pump == 0:  # '&' durch 'and' ersetzt
+        elif sensor_digital.value() == 0 and status_pump == 0:
             pump.off()
-        
-        time.sleep(pump_time_stop)  # Einrückung korrigiert, else: entfernt
+            data_digital = 0
+        time.sleep(pump_time_stop)
+
+run_watering()
