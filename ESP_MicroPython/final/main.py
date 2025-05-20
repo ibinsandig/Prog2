@@ -19,7 +19,23 @@ led_green.off()
 sensor_analog = ADC(0)
 sensor_digital = Pin(4, Pin.IN)
 
-pump = Pin(5, Pin.OUT) 
+class WaterPump:
+    def __init__(self, pin):
+        self.pump = machine.Pin(pin, machine.Pin.Out)
+
+    def start(self):
+        self.pump.on()
+
+    def stop(self):
+        self.pump.off()
+
+    def startstop(self, time):
+        self.start()
+        time.delay(time)
+        self.stop()
+
+pump = WaterPump(5)
+# pump = Pin(5, Pin.OUT) 
 
 # Globale Variablen
 
@@ -96,12 +112,12 @@ def run_watering():
             print(f"Pumpe an für {pump_time} sek")
             led_green.on()
             data_digital = 1
-            pump.on()
+            pump.start()
             time.sleep(pump_time)  # Sleep nach pump.on() eingefügt
             
         
         elif sensor_digital.value() == 0 and status_pump == 0:
-            pump.off()
+            pump.stop()
             led_green.off()
             data_digital = 0
         time.sleep(pump_time_stop)

@@ -11,10 +11,20 @@ Durchführung in 2er-Teams (bei 43 Personen(?) 20 2er-Gruppen + 1 3er-Gruppe)
     ▪ die Basis für das Projekt ist der Mikrocontroller ESP8266 (micropython-fähig)
 
 Diese Themen müssen im Miniprojekt abgedeckt werden:
-    1. Mikrocontroller: Das Projekt muss mit einem Mikrocontroller, z.B. ESP8266, umgesetzt werden
-    2. Simple Multitasking: Es muss dabei das Konzept der voneinander unabhängigen Aufgaben umgesetzt werden.
-    3. Kommunikation: Es müssen Daten in beiden Richtungen zwischen dem Mikrocontroller und dem Server/Benutzer-Interface ausgetauscht werden.
-    4. Datenspeicher: Es ist eine langfristige Datenspeicherungzu implementieren. Diesesoll über eine Datenbank realisiert werden.
-    5. User-Interface über HTML (+Script): Es ist ein graphisches User-Interface vorzusehen
-    6. Qualitätssicherung: Dokumentation, z.B. über Docstring und Upload in Repository
-    7. Objekte: Das Mikrocontrollerprogramm muss mithilfe von Objekten umgesetzt werden.
+[✓]    1. Mikrocontroller: Das Projekt muss mit einem Mikrocontroller, z.B. ESP8266, umgesetzt werden /check
+
+            ESP8266 verwendet
+
+[✓]    2. Simple Multitasking: Es muss dabei das Konzept der voneinander unabhängigen Aufgaben umgesetzt werden.
+
+        threading im python server
+
+[X]    3. Kommunikation: Es müssen Daten in beiden Richtungen zwischen dem Mikrocontroller und dem Server/Benutzer-Interface ausgetauscht werden.
+
+[X]    4. Datenspeicher: Es ist eine langfristige Datenspeicherungzu implementieren. Diesesoll über eine Datenbank realisiert werden.
+
+[X]    5. User-Interface über HTML (+Script): Es ist ein graphisches User-Interface vorzusehen
+
+[X]    6. Qualitätssicherung: Dokumentation, z.B. über Docstring und Upload in Repository
+
+[✓]    7. Objekte: Das Mikrocontrollerprogramm muss mithilfe von Objekten umgesetzt werden.
