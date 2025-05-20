@@ -9,3 +9,4 @@ function ZurMainpage(){
 function ZurInfo(){
     window.location.href = "/info";
 }
+
