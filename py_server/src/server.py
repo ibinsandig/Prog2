@@ -4,7 +4,8 @@ import time
 import paho.mqtt.client as mqtt
 from flask_socketio import SocketIO
 import threading
-
+from db.datab import insert_data_flaskiot
+import mysql.connector
 
 app = Flask(__name__, static_url_path='/static')
 app.register_blueprint(main_routes)
@@ -21,9 +22,17 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(MQTT_TOPIC_SUB)
 
 def on_message(client, userdata, msg):
-    print(f"Received message: {msg.payload.decode()} on topic {msg.topic}")
-    # Emit the received data to all connected web clients
-    socketio.emit('mqtt_message', {'topic': msg.topic, 'payload': msg.payload.decode()})
+    payload = msg.payload.decode()
+    print(f"Received message: {payload} on topic {msg.topic}")
+    
+    # Speichern in MariaDB über die externe Datei
+    insert_data_flaskiot(msg.topic, payload)
+    
+    # Weiterleiten an Web-Clients
+    socketio.emit('mqtt_message', {
+        'topic': msg.topic,
+        'payload': payload
+    })
 
 # Set up MQTT client
 
@@ -36,7 +45,7 @@ def connect_mqtt():
     mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
     mqtt_client.loop_start()            
 
-#threading.Thread(target=connect_mqtt).start()
+threading.Thread(target=connect_mqtt).start()
  
 if __name__ == '__main__':
     socketio.run(app, debug=True, host='0.0.0.0', port=3000)
