@@ -21,7 +21,7 @@ Diese Themen müssen im Miniprojekt abgedeckt werden:
 
 [X]    3. Kommunikation: Es müssen Daten in beiden Richtungen zwischen dem Mikrocontroller und dem Server/Benutzer-Interface ausgetauscht werden.
 
-[X]    4. Datenspeicher: Es ist eine langfristige Datenspeicherungzu implementieren. Diesesoll über eine Datenbank realisiert werden.
+[✓]    4. Datenspeicher: Es ist eine langfristige Datenspeicherungzu implementieren. Diesesoll über eine Datenbank realisiert werden.
 
 [X]    5. User-Interface über HTML (+Script): Es ist ein graphisches User-Interface vorzusehen
 
