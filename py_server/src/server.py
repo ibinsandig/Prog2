@@ -13,8 +13,10 @@ socketio = SocketIO(app)
 
 MQTT_BROKER = 'localhost'
 MQTT_PORT = 1883
-MQTT_TOPIC_SUB = 'watering/status'
-MQTT_TOPIC_PUB = 'watering/control'
+MQTT_TOPIC_PUB = b'watering/status'
+MQTT_TOPIC_PUB2 = b'watering/pump_status'
+MQTT_TOPIC_PUB3 = b'watering/status2'
+MQTT_TOPIC_SUB = b'watering/control'
 
 # MQTT Callback functions
 def on_connect(client, userdata, flags, rc):
