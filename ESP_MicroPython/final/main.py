@@ -51,7 +51,7 @@ def senden(zu_verwendende_topic, data):
     status_msg = str(status).encode()
         
     try:
-        client.Publish(zu_verwendende_topic, status_msg)
+        client.publish(zu_verwendende_topic, status_msg)
         print(f"Nachricht gesendet: {status_msg}")
     except Exception as e:
         print(f"Fehler beim Senden der Nachricht: {e}")
@@ -81,7 +81,7 @@ def empfangen(topic, msg):
 def connect_mqtt():
     try:
         client = MQTTClient("ESP8266", MQTT_BROKER, port=MQTT_PORT)
-        client.set_callback empfangen)
+        client.set_callback (empfangen)
         client.connect()
         client.subscribe(MQTT_TOPIC_SUB)
         print("MQTT verbunden")
@@ -119,6 +119,7 @@ def run_watering():
     
         if sensor_digital.value() == 1 or status_pump == 1:
             senden(MQTT_TOPIC_PUB2, 1)
+            senden(MQTT_TOPIC_PUB, sensor_digital.value())
             print(f"Pumpe an für {pump_time} sek")
             led_green.on()
             data_digital = 1
@@ -128,7 +129,9 @@ def run_watering():
         
         elif sensor_digital.value() == 0 and status_pump == 0:
             senden(MQTT_TOPIC_PUB2, 0)
+            senden(MQTT_TOPIC_PUB, sensor_digital.value())
             pump.off()
+            print(f"Pumpe aus für {pump_time_stop} sek")
             led_green.off()
             data_digital = 0
         time.sleep(pump_time_stop)
