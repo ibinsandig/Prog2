@@ -44,10 +44,7 @@ def senden(zu_verwendende_topic, data):
     global client
     
     if client:
-        status = {
-            "digital": data
-            #"pump": status_pump
-        }
+        status = data
     status_msg = str(status).encode()
         
     try:
