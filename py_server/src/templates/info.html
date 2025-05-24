@@ -1,31 +1,24 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESP8266 Bedienpanel</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>MQTT Data</title>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>-->
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
 </head>
 <body>
-    <h1>ESP8266 Bedienpanel</h1>
-    
-    <div class="status">
-        <p>Verbindungsstatus: <span id="connection-status">Nicht verbunden</span></p>
-        <p>IP-Adresse: <span id="device-ip">---</span></p>
-    </div>
+    <h1>MQTT Messages</h1>
+    <div id="messages"></div>
 
-    <div class="control">
-        <h2>Pumpenstatus</h2>
-        <p>Aktivität: <span id="pump-status">Aus</span></p>
-        <p>Menge ausgegeben: <span id="water-amount">0 L</span></p>
-        <button onclick="togglePump()">Pumpe ein/aus</button>
-    </div>
-
-    <div class="sensor">
-        <h2>Feuchtigkeitssensor</h2>
-        <p>Status: <span id="humidity-status">---</span></p>
-    </div>
-
-    <script src="script.js"></script>
+    <script>
+        var socket = io();
+        var messagesDiv = document.getElementById('messages');
+        console.log("Connecting to socket...");
+        socket.on('mqtt_message', function(data) {
+            console.log("Received message:", data);
+            var message = document.createElement('p');
+            message.textContent = `Topic: ${data.topic}, Message: ${data.payload}`;
+            messagesDiv.appendChild(message);
+        });
+    </script>
 </body>
 </html>
