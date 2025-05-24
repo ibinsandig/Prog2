@@ -13,6 +13,7 @@ MQTT_BROKER = "192.168.178.21"
 #Lan: "192.168.178.21"
 MQTT_PORT = 1883
 MQTT_TOPIC_PUB = b'watering/status'
+MQTT_TOPIC_PUB2 = b'watering/info'
 MQTT_TOPIC_SUB = b'watering/control'
 
 
@@ -39,12 +40,17 @@ pump_time = 3
 pump_time_stop = 3
 
 
+
 def senden(zu_verwendende_topic, data, topic):
     global client
     
     if client:
-        status = { topic + ":" + data}
+        status = f"{topic}:{data}"
+        
+    print(status)
     status_msg = str(status).encode()
+
+    print(status_msg)
         
     try:
         client.publish(zu_verwendende_topic, status_msg)
@@ -114,8 +120,7 @@ def run_watering():
             client = None
     
         if sensor_digital.value() == 1 or status_pump == 1:
-            senden(MQTT_TOPIC_PUB, 1)
-            senden(MQTT_TOPIC_PUB, sensor_digital.value(), "watering")
+            senden(MQTT_TOPIC_PUB, sensor_digital.value(), "moisture")
             print(f"Pumpe an für {pump_time} sek")
             led_green.on()
             data_digital = 1
@@ -124,12 +129,11 @@ def run_watering():
             
         
         elif sensor_digital.value() == 0 and status_pump == 0:
-            senden(MQTT_TOPIC_PUB, 0)
-            senden(MQTT_TOPIC_PUB, sensor_digital.value(), "watering")
+            senden(MQTT_TOPIC_PUB, sensor_digital.value(), "moisture")
             pump.off()
             print(f"Pumpe aus für {pump_time_stop} sek")
             led_green.off()
             data_digital = 0
-        time.sleep(pump_time_stop)
+            time.sleep(pump_time_stop)
 
 run_watering()
