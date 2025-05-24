@@ -2,7 +2,7 @@ from machine import Pin, ADC #typing: ignore
 from umqtt.simple import MQTTClient #typing: ignore
 import time
 # Konfiguration
-MQTT_BROKER = "10.87.223.167"
+MQTT_BROKER = "192.168.178.21"
 #zero:
 #"10.78.162.167"
 # neu: 10.87.223.167  
@@ -10,10 +10,9 @@ MQTT_BROKER = "10.87.223.167"
 #RPi4:
 #"192.168.178.21" 
 #"10.78.162.224"
+#Lan: "192.168.178.21"
 MQTT_PORT = 1883
 MQTT_TOPIC_PUB = b'watering/status'
-MQTT_TOPIC_PUB2 = b'watering/pump_status'
-MQTT_TOPIC_PUB3 = b'watering/status2'
 MQTT_TOPIC_SUB = b'watering/control'
 
 
@@ -40,11 +39,11 @@ pump_time = 3
 pump_time_stop = 3
 
 
-def senden(zu_verwendende_topic, data):
+def senden(zu_verwendende_topic, data, topic):
     global client
     
     if client:
-        status = data
+        status = { topic + ":" + data}
     status_msg = str(status).encode()
         
     try:
@@ -115,8 +114,8 @@ def run_watering():
             client = None
     
         if sensor_digital.value() == 1 or status_pump == 1:
-            senden(MQTT_TOPIC_PUB2, 1)
-            senden(MQTT_TOPIC_PUB, sensor_digital.value())
+            senden(MQTT_TOPIC_PUB, 1)
+            senden(MQTT_TOPIC_PUB, sensor_digital.value(), "watering")
             print(f"Pumpe an für {pump_time} sek")
             led_green.on()
             data_digital = 1
@@ -125,8 +124,8 @@ def run_watering():
             
         
         elif sensor_digital.value() == 0 and status_pump == 0:
-            senden(MQTT_TOPIC_PUB2, 0)
-            senden(MQTT_TOPIC_PUB, sensor_digital.value())
+            senden(MQTT_TOPIC_PUB, 0)
+            senden(MQTT_TOPIC_PUB, sensor_digital.value(), "watering")
             pump.off()
             print(f"Pumpe aus für {pump_time_stop} sek")
             led_green.off()
