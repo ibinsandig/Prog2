@@ -93,10 +93,7 @@ def connect_mqtt():
         print(f"MQTT-Verbindung fehlgeschlagen: {e}")
         return None
 
-
 client = connect_mqtt()
-
-
 
 def run_watering():
     global client
@@ -113,15 +110,13 @@ def run_watering():
                     
             time.sleep(5) # Warte 5 Sekunden zwischen den Status-Updates
         
-
-
         except Exception as e:
             print('Fehler in Hauptschleife:', e)
             time.sleep(5)
             client = None
     
         if sensor_digital.value() == 1 or status_pump == 1:
-            senden(MQTT_TOPIC_PUB, sensor_digital.value(), "moisture")
+            senden(MQTT_TOPIC_PUB, sensor_digital.value(), "moistureD")
             print(f"Pumpe an für {pump_time} sek")
             led_green.on()
             data_digital = 1
@@ -130,7 +125,7 @@ def run_watering():
             
         
         elif sensor_digital.value() == 0 and status_pump == 0:
-            senden(MQTT_TOPIC_PUB, sensor_digital.value(), "moisture")
+            senden(MQTT_TOPIC_PUB, sensor_digital.value(), "moistureD")
             pump.off()
             print(f"Pumpe aus für {pump_time_stop} sek")
             led_green.off()
