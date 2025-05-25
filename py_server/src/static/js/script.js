@@ -90,8 +90,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // 10 Sekunden Aktualisierung für Plots
+// eine gewisse Differenz zwischen den Aktualisierungen der Plots muss gegeben sein, damit sie sich nicht gegenseitig überschreiben
 setInterval(refreshPlotA, 11000);
 setInterval(refreshPlotD, 10000);
 
-// 3 Sekunden Aktualisierung für aktuelle Daten
-setInterval(fetchLatestData, 3000);
+// 0,5 Sekunden Aktualisierung für aktuelle Daten
+setInterval(fetchLatestData, 500);
