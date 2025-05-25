@@ -33,7 +33,7 @@ pump = Pin(5, Pin.OUT)
 
 status_pump = 0
 
-trigger = 300
+trigger = 800
 
 pump_time = 3
 
@@ -95,6 +95,14 @@ def connect_mqtt():
 
 client = connect_mqtt()
 
+def auswertung_analog(trigger):
+    # umso größer der Wert ist, desto trockener ist die Erde
+    # lampe an feucht genug
+    if sensor_analog.read() > trigger:
+        return True
+    else:
+        return False
+
 def run_watering():
     global client
     while True:
@@ -114,20 +122,34 @@ def run_watering():
             print('Fehler in Hauptschleife:', e)
             time.sleep(5)
             client = None
-    
-        if sensor_digital.value() == 1 or status_pump == 1:
+
+        if status_pump == 1 or auswertung_analog(trigger) == True:
+       # if sensor_digital.value() == 1 or status_pump == 1 or auswertung_analog(trigger) == True:
+            print("--------------")
             senden(MQTT_TOPIC_PUB, sensor_digital.value(), "moistureD")
+            print(f"Sensor digital: {sensor_digital.value()}")
+            time.sleep(1)  # nicht Entfernen, da sonst die MQTT-Nachricht vor Auswerten über schreiben wird.
+            senden(MQTT_TOPIC_PUB, sensor_analog.read(), "moistureA")
+            print(f"Sensor analog: {sensor_analog.read()}")
+            print(status_pump)
             print(f"Pumpe an für {pump_time} sek")
+            print("--------------")
             led_green.on()
             data_digital = 1
             pump.on()
             time.sleep(pump_time)  # Sleep nach pump.on() eingefügt
             
-        
-        elif sensor_digital.value() == 0 and status_pump == 0:
+        elif status_pump == 0 or auswertung_analog(trigger) == False:
+        #elif sensor_digital.value() == 0 or status_pump == 0 or auswertung_analog(trigger) == False:
+            print("--------------")
             senden(MQTT_TOPIC_PUB, sensor_digital.value(), "moistureD")
+            print(f"Sensor digital: {sensor_digital.value()}")
+            time.sleep(1)  # nicht Entfernen, da sonst die MQTT-Nachricht vor Auswerten über schreiben wird.
+            senden(MQTT_TOPIC_PUB, sensor_analog.read(), "moistureA")
+            print(f"Sensor analog: {sensor_analog.read()}")
             pump.off()
             print(f"Pumpe aus für {pump_time_stop} sek")
+            print("--------------")
             led_green.off()
             data_digital = 0
             time.sleep(pump_time_stop)
