@@ -41,28 +41,57 @@ function fetchLatestData() {
                 let pump = '--';
                 
                 parts.forEach(p => {
-                    if (p.startsWith('moisture:')) {
-                        moisture = p.split(':')[1];
+                    // Unterstützung für verschiedene Moisture-Typen
+                    if (p.startsWith('moisture:') || p.startsWith('moistureA:')) {
+                        moistureA = p.split(':')[1];
+                    }
+                    if (p.startsWith('moistureD:')) {
+                        moistureD = p.split(':')[1];
                     }
                     if (p.startsWith('pump:')) {
                         pump = p.split(':')[1] === 'on' ? 'EIN' : 'AUS';
                     }
+                    
                 });
 
-                document.getElementById("moisture").textContent = moisture;
+                document.getElementById("moistureA").textContent = moistureA;
+                document.getElementById("moistureD").textContent = moistureD;
                 document.getElementById("pump-status").textContent = pump;
             }
+        })
+        .catch(error => {
+            console.error("Fehler beim Abrufen der Daten:", error);
         });
 }
 
-function refreshPlot() {
-    const plotImg = document.getElementById("moisture-plot");
-    const timestamp = new Date().getTime();  // Cache-Busting
-    plotImg.src = `/moisture-plot?t=${timestamp}`;
+function refreshPlotA() {
+    const plotImg = document.getElementById("moistureA-plot");
+    if (plotImg) {
+        const timestamp = new Date().getTime();  
+        plotImg.src = `/moistureA-plot?t=${timestamp}`;
+        console.log("RefreshPlotA aufgerufen:", plotImg.src);
+    }
 }
 
-// 3,1 Sekunden Aktualisierung
-setInterval(refreshPlot, 3100);
+function refreshPlotD() {
+    const plotImg = document.getElementById("moistureD-plot");
+    if (plotImg) {
+        const timestamp = new Date().getTime();  
+        plotImg.src = `/moistureD-plot?t=${timestamp}`;
+        console.log("RefreshPlotD aufgerufen:", plotImg.src);
+    }
+}
 
-// 3 Sekunden Aktualisierung
+// Initiale Aktualisierung beim Laden der Seite
+document.addEventListener('DOMContentLoaded', function() {
+    refreshPlotA();
+    refreshPlotD();
+    fetchLatestData();
+});
+
+// 10 Sekunden Aktualisierung für Plots
+setInterval(refreshPlotA, 11000);
+setInterval(refreshPlotD, 10000);
+
+// 3 Sekunden Aktualisierung für aktuelle Daten
 setInterval(fetchLatestData, 3000);
