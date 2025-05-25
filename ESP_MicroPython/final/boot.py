@@ -3,23 +3,29 @@ import time
 import network # type: ignore
 import socket
 
-# WLAN-Station-Modus aktivieren
+# Wlan aktivieren 
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
 
-# Mit WLAN verbinden
+
 print("Verbinde mit WLAN...")
-ssid = "WehLan"
-password = "1234wlan5678"
+ssid = "Lochbox"
+password = "280874b61133"
 
-# ssid = "Lochbox"
-# password = ""
+# Wlan verbinden
+wlan.connect(ssid, password)
 
-# Warten, bis die Verbindung hergestellt ist
-while not wlan.isconnected():
-    pass
-    print(".")
-    time.sleep(0.5)
+# versucht es x mal
+max_wait = 10
+while max_wait > 0:
+    if wlan.isconnected():
+        break
+    max_wait -= 1
+    print("Verbindungsversuch...")
+    time.sleep(1)
 
-print("Verbunden! IP-Adresse:", wlan.ifconfig()[0])
-
+if wlan.isconnected():
+    print("Verbunden! IP-Adresse:", wlan.ifconfig()[0])
+else:
+    print("Verbindung fehlgeschlagen!")
+    print("Status:", wlan.status())

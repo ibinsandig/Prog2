@@ -69,13 +69,14 @@ def empfangen(topic, msg):
     message = msg.decode()
     print(f"Nachricht: {message}")
 
+    
     if message == "on":
         status_pump = 1
-        led_green.on()
+        #led_green.on()
         print("Pumpe eingeschaltet")
     elif message == "off":
         status_pump = 0
-        led_green.off()
+        #led_green.off()
         print("Pumpe ausgeschaltet")
 
 
