@@ -12,7 +12,8 @@
         <h1>Bewässerungssteuerung</h1>
 
         <div class="sensor-data">
-            <h2>Bodenfeuchtigkeit: <span id="moisture">--</span>%</h2>
+            <h2>Digitaler Wert: <span id="moistureD">--</span></h2>
+            <h2>Analoger Wert:<span id="moistureA">--</span></h2>
             <h2>Pumpenstatus: <span id="pump-status">AUS</span></h2>
         </div>
 
@@ -25,12 +26,16 @@
             <button onclick="ZurMainpage()">Zurück zur Startseite</button>
             <button onclick="ZurInfo()">Zur Info-Seite</button>
         </div>
-        <div class="sensor-graph">
+        <div class="sensor-graphA">
             <h2>Moisture Verlauf (letzte 300 Einträge)</h2>
-            <img id="moisture-plot" src="/moisture-plot" alt="Moisture Plot" style="width: 100%; max-width: 800px;">
+            <img id="moistureA-plot" src="/moistureA-plot" alt="Moisture A Plot" style="width: 100%; max-width: 800px;">
 
         </div>
+        <div class="sensor-graphD">
+            <h2>Moisture Verlauf (letzte 300 Einträge)</h2>
+            <img id="moistureD-plot" src="/moistureD-plot" alt="Moisture D Plot" style="width: 100%; max-width: 800px;">
 
+        </div>
     </div>
 </body>
 </html>
