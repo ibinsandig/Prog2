@@ -19,11 +19,11 @@ Diese Themen müssen im Miniprojekt abgedeckt werden:
 
         threading im python server
 
-[X]    3. Kommunikation: Es müssen Daten in beiden Richtungen zwischen dem Mikrocontroller und dem Server/Benutzer-Interface ausgetauscht werden.
+[✓]    3. Kommunikation: Es müssen Daten in beiden Richtungen zwischen dem Mikrocontroller und dem Server/Benutzer-Interface ausgetauscht werden.
 
 [✓]    4. Datenspeicher: Es ist eine langfristige Datenspeicherungzu implementieren. Diesesoll über eine Datenbank realisiert werden.
 
-[X]    5. User-Interface über HTML (+Script): Es ist ein graphisches User-Interface vorzusehen
+[✓]    5. User-Interface über HTML (+Script): Es ist ein graphisches User-Interface vorzusehen
 
 [X]    6. Qualitätssicherung: Dokumentation, z.B. über Docstring und Upload in Repository
 
