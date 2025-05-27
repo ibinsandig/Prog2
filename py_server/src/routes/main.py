@@ -1,11 +1,11 @@
 from flask import send_file, Blueprint, render_template, request, jsonify
-import mysql.connector
+import mysql.connector  # type: ignore
 import paho.mqtt.publish as publish
 import io
-import matplotlib
+import matplotlib   # type: ignore
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import pandas as pd
+import matplotlib.pyplot as plt # type: ignore
+import pandas as pd # type: ignore
 
 main_routes = Blueprint('main_routes', __name__, url_prefix='/')
 
