@@ -1,23 +1,8 @@
 from machine import Pin, ADC #typing: ignore
 from umqtt.simple import MQTTClient #typing: ignore
 import time
-# Konfiguration
-MQTT_BROKER = "192.168.178.21"
-#zero:
-#"10.78.162.167"
-# neu: 10.87.223.167  
 
-#RPi4:
-#"192.168.178.21" 
-#"10.78.162.224"
-#Lan: "192.168.178.21"
-MQTT_PORT = 1883
-MQTT_TOPIC_PUB = b'watering/status'
-MQTT_TOPIC_PUB2 = b'watering/info'
-MQTT_TOPIC_SUB = b'watering/control'
-
-
-# Hardware
+"""Initialisierung der Pins und Sensoren"""
 led_green = Pin(12, Pin.OUT)
 led_green.off()
 
@@ -26,21 +11,21 @@ sensor_digital = Pin(4, Pin.IN)
 
 pump = Pin(5, Pin.OUT) 
 
-# Globale Variablen
-
+"""Globale Variablen"""
 #data_analog = sensor_analog.read()
 #data_digital = sensor_digital.value()
-
 status_pump = 0
-
 trigger = 800
-
 pump_time = 3
-
 pump_time_stop = 3
 
+"""Konfiguration des MQTT-Brokers und der Topics"""
+MQTT_BROKER = "192.168.178.21"
+MQTT_PORT = 1883
+MQTT_TOPIC_PUB = b'watering/status'
+MQTT_TOPIC_SUB = b'watering/control'
 
-
+"""Funktion zum Senden von Nachrichten über MQTT"""
 def senden(zu_verwendende_topic, data, topic):
     global client
     
@@ -58,8 +43,7 @@ def senden(zu_verwendende_topic, data, topic):
     except Exception as e:
         print(f"Fehler beim Senden der Nachricht: {e}")
 
-# Callback-Funktion für empfangene Nachrichten
-
+"""Funktion zum Empfangen von Nachrichten über MQTT"""
 def empfangen(topic, msg):
     global status_pump
     
@@ -68,7 +52,6 @@ def empfangen(topic, msg):
     print(f"Topic: {topic}")
     message = msg.decode()
     print(f"Nachricht: {message}")
-
     
     if message == "on":
         status_pump = 1
@@ -79,8 +62,7 @@ def empfangen(topic, msg):
         #led_green.off()
         print("Pumpe ausgeschaltet")
 
-
-# MQTT-Verbindung
+"""Herstellen der MQTT-Verbindung und subscriben des Topics"""
 def connect_mqtt():
     try:
         client = MQTTClient("ESP8266", MQTT_BROKER, port=MQTT_PORT)
@@ -93,8 +75,7 @@ def connect_mqtt():
         print(f"MQTT-Verbindung fehlgeschlagen: {e}")
         return None
 
-client = connect_mqtt()
-
+"""Abgleichen des analogen Sensors mit dem Triggerwert"""
 def auswertung_analog(trigger):
     # umso größer der Wert ist, desto trockener ist die Erde
     # lampe an feucht genug
@@ -103,6 +84,7 @@ def auswertung_analog(trigger):
     else:
         return False
 
+"""Hauptfunktion zum Betrieb der automatischen Bewässerung"""
 def run_watering():
     global client
     while True:
@@ -154,4 +136,6 @@ def run_watering():
             data_digital = 0
             time.sleep(pump_time_stop)
 
+"""Ausführen der Funktionen"""
+client = connect_mqtt()
 run_watering()
