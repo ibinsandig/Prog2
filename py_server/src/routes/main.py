@@ -41,7 +41,7 @@ def get_mqtt_data():
     return jsonify({'data': received_data})
 
 
-"""Route für das Abgreifen der letzten Daten aus der Datenbank"""
+"""Route für das Abgreifen der letzten Feuchtigkeitsdaten aus der Datenbank"""
 @main_routes.route('/api/latest-data')
 def latest_data():
     conn = mysql.connector.connect(
@@ -60,6 +60,25 @@ def latest_data():
         return jsonify(result)
     else:
         return jsonify({"topic": "", "payload": "", "timestamp": ""})
+
+"""Route für das Abgreifen der letzten Pumpendaten aus der Datenbank"""
+@main_routes.route('/api/latest-pump')
+def latest_pump():
+    conn = mysql.connector.connect(
+        host='localhost',
+        user='sflask',
+        password='12345678',
+        database='flask_server'
+    )
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT payload FROM pump ORDER BY id DESC LIMIT 1")
+    result = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if result:
+        return jsonify(result)
+    else:
+        return jsonify({"payload": ""})
 
 """Route für das Plotten der Graphik moistureA"""
 @main_routes.route('/moistureA-plot')
@@ -124,7 +143,7 @@ def moisture_plot():
         
         # Matplotlib-Plot erzeugen
         fig, ax = plt.subplots(figsize=(10, 5))
-        ax.plot(df['timestamp'], df['moistureA'], color='green', marker='o', markersize=3, linewidth=1)
+        ax.plot(df['timestamp'], df['moistureA'], color=(38/255, 138/255, 180/255), marker='o', markersize=3, linewidth=1)
         ax.set_title(f"Analoge Moisture-Werte (moistureA) - {len(data)} Datenpunkte")
         ax.set_xlabel("Zeit")
         ax.set_ylabel("Feuchtigkeit A (%)")
@@ -204,7 +223,7 @@ def moistureD_plot():
         
         # Matplotlib-Plot erzeugen
         fig, ax = plt.subplots(figsize=(10, 5))
-        ax.plot(df['timestamp'], df['moistureD'], color='red', marker='o', markersize=3, linewidth=1)
+        ax.plot(df['timestamp'], df['moistureD'], color='green', marker='o', markersize=3, linewidth=1)
         ax.set_title(f"Digitale Moisture-Werte (moistureD) - {len(data)} Datenpunkte")
         ax.set_xlabel("Zeit")
         ax.set_ylabel("Feuchtigkeit D (%)")
