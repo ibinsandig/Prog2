@@ -9,8 +9,8 @@ wlan.active(True)
 
 
 print("Verbinde mit WLAN...")
-ssid = "WehLan"
-password = "1234wlan5678"
+ssid = "Lochbox"
+password = "280874b61133"
 
 """Wlan verbinden"""
 wlan.connect(ssid, password)
