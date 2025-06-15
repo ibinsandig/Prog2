@@ -19,7 +19,7 @@ pump = Pin(5, Pin.OUT)
 #data_digital = sensor_digital.value()
 status_pump = 0
 trigger = 800
-pump_time = 3
+pump_time = 5  # Zeit in Sekunden, die die Pumpe laufen soll
 pump_time_stop = 3
 
 client = None
