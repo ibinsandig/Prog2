@@ -6,6 +6,9 @@ import time
 led_green = Pin(12, Pin.OUT)
 led_green.off()
 
+check_led = Pin(2, Pin.OUT)
+check_led.off()  # AN (LOW = AN beim ESP8266)
+
 sensor_analog = ADC(0)
 sensor_digital = Pin(4, Pin.IN)
 
